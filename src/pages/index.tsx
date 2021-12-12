@@ -1,17 +1,31 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/dist/client/router';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import { githubClient } from '../github-client';
 
-const Home: NextPage = () => {
-  const userId = 'solt9029';
+const Index: NextPage = () => {
+  // const { data, error } = useSWR(`/users/${userId}/following?per_page=100`, (path) => {
+  //   return githubClient.get(path);
+  // });
+  const router = useRouter();
 
-  const { data, error } = useSWR(`/users/${userId}/following?per_page=100`, (path) => {
-    return githubClient.get(path);
-  });
+  const [userId, setUserId] = useState('');
 
-  console.log(data);
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setUserId(evt.target.value);
+  };
 
-  return <div></div>;
+  const handleClick = () => {
+    router.push(userId);
+  };
+
+  return (
+    <div>
+      <input type="text" onChange={handleChange} />
+      <button onClick={handleClick}>更新</button>
+    </div>
+  );
 };
 
-export default Home;
+export default Index;
