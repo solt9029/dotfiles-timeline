@@ -1,29 +1,15 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/dist/client/router';
-import React, { useState } from 'react';
-import useSWR from 'swr';
-import { githubClient } from '../github-client';
+import React from 'react';
+import { appwrite } from '../appwrite';
 
 const Index: NextPage = () => {
-  // const { data, error } = useSWR(`/users/${userId}/following?per_page=100`, (path) => {
-  //   return githubClient.get(path);
-  // });
-  const router = useRouter();
-
-  const [userId, setUserId] = useState('');
-
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setUserId(evt.target.value);
-  };
-
-  const handleClick = () => {
-    router.push(userId);
+  const handleClick = async () => {
+    await appwrite.account.createOAuth2Session('github', 'http://localhost:3000/path', 'http://localhost:3000/path');
   };
 
   return (
     <div>
-      <input type="text" onChange={handleChange} />
-      <button onClick={handleClick}>更新</button>
+      <button onClick={handleClick}>ログイン</button>
     </div>
   );
 };
