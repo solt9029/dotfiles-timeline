@@ -10,9 +10,8 @@ const AppInit = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await appwrite.account.get();
-        console.log(res);
-        setCurrentUser({ id: res.$id, name: res.name });
+        const session = await appwrite.account.getSession('current');
+        setCurrentUser({ id: session.$id, providerToken: session.providerToken });
       } catch (err) {
         console.log(err);
         setCurrentUser(null);
