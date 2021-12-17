@@ -4,7 +4,10 @@ import { appwrite } from '../appwrite';
 
 const Timeline: NextPage = () => {
   useEffect(() => {
-    (async () => {})();
+    (async () => {
+      // setCurrentGithubUser
+      //
+    })();
   }, []);
 
   return <div>timeline</div>;
