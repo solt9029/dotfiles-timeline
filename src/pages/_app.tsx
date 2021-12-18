@@ -14,7 +14,7 @@ const AppInit = () => {
         setCurrentUser({ id: session.$id, providerToken: session.providerToken });
       } catch (err) {
         console.log(err);
-        setCurrentUser(null);
+        setCurrentUser(undefined);
       }
     })();
   }, [setCurrentUser]);

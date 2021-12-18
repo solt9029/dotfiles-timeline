@@ -8,7 +8,7 @@ export const LogoutButton = () => {
 
   const handleClick = async () => {
     await appwrite.account.deleteSession('current');
-    setCurrentUser(null);
+    setCurrentUser(undefined);
   };
 
   return <button onClick={handleClick}>ログアウト</button>;

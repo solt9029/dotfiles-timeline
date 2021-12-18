@@ -5,4 +5,4 @@ type CurrentUser = {
   providerToken: string;
 };
 
-export const currentUserState = atom<CurrentUser | null>({ key: 'currentUserState', default: null });
+export const currentUserState = atom<CurrentUser | undefined>({ key: 'currentUserState', default: undefined });
