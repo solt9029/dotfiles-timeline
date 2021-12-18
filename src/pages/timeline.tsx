@@ -13,6 +13,16 @@ const Timeline: NextPage = () => {
       if (currentUser === undefined) {
         router.push('http://localhost:3000');
       }
+
+      // sample
+      // for (let i = 0; i < 10; i++) {
+      //   await new Promise((resolve) => setTimeout(resolve, 3000));
+      //   console.log('aiueo');
+      //   setCurrentUser({ id: i.toString(), providerToken: i.toString() });
+      // }
+
+      // step1: fetch followingUsers
+      // step2: fetch commits using for statement
     })();
   }, [router, currentUser]);
 
