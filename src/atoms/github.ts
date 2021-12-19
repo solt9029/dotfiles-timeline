@@ -9,12 +9,8 @@ type Commit = {
 type User = {
   login: string;
   avatarUrl: string;
-  twitterUsername: string;
-  bio: string;
-  followingCount: number;
-  followerCount: number;
   commits: Commit[];
-  updatedAt: Date;
+  updatedAt: Date | undefined;
 };
 
 export type GithubState = {

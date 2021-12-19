@@ -2,18 +2,19 @@ import dayjs from 'dayjs';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
-import { fetchCurrentUser } from '../api-clients/github';
+import { fetchCurrentUser, fetchFollowingUsers } from '../api-clients/github';
 import { appwrite } from '../appwrite';
 import { currentUserState } from '../atoms/current-user';
-import { githubCurrentUserState } from '../atoms/github';
+import { githubCurrentUserState, githubFollowingUsersState } from '../atoms/github';
 
 const AppInit = () => {
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
   const [githubCurrentUser, setGithubCurrentUser] = useRecoilState(githubCurrentUserState);
+  const [githubFollowingUsers, setGithubFollowingUsers] = useRecoilState(githubFollowingUsersState);
 
   useEffect(() => {
     (async () => {
-      if (currentUser && githubCurrentUser) {
+      if (currentUser && githubCurrentUser && githubFollowingUsers) {
         return;
       }
 
@@ -22,24 +23,31 @@ const AppInit = () => {
         setCurrentUser({ id: session.$id, providerToken: session.providerToken });
 
         const {
-          data: { avatar_url, followers, following, login, bio, twitter_username },
+          data: { avatar_url, login },
         } = await fetchCurrentUser(session.providerToken);
         setGithubCurrentUser({
           login,
-          bio,
           avatarUrl: avatar_url,
-          followerCount: followers,
-          followingCount: following,
-          twitterUsername: twitter_username,
           commits: [],
-          updatedAt: dayjs().toDate(),
+          updatedAt: undefined,
         });
+
+        const { data: followingUsers } = await fetchFollowingUsers(login, session.providerToken);
+        console.log(followingUsers);
+        setGithubFollowingUsers(
+          followingUsers.map(({ avatar_url, login }) => ({
+            avatarUrl: avatar_url,
+            login,
+            commits: [],
+            updatedAt: undefined,
+          }))
+        );
       } catch (err) {
         console.log(err);
         setCurrentUser(undefined);
       }
     })();
-  }, [currentUser, githubCurrentUser, setCurrentUser, setGithubCurrentUser]);
+  }, []); // eslint-disable-line
 
   return null;
 };

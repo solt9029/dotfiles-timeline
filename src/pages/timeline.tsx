@@ -1,11 +1,13 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../atoms/current-user';
+import { githubFollowingUsersState } from '../atoms/github';
 
 const Timeline: NextPage = () => {
   const currentUser = useRecoilValue(currentUserState);
+  const [githubFollowingUsers, setGithubFollowingUsers] = useRecoilState(githubFollowingUsersState);
   const router = useRouter();
 
   useEffect(() => {
