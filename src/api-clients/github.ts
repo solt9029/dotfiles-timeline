@@ -23,6 +23,28 @@ type FetchFollowingUsersResponse = {
   [key: string]: unknown;
 };
 
+type FetchCommitsResponse = {
+  data: {
+    commit: {
+      message: string;
+      comment_count: number;
+      committer: {
+        date: string;
+        [key: string]: unknown;
+      };
+      [key: string]: unknown;
+    };
+    committer: {
+      login: string;
+      html_url: string;
+      [key: string]: unknown;
+    };
+    html_url: string;
+    [key: string]: unknown;
+  }[];
+  [key: string]: unknown;
+};
+
 export const client = rateLimit(axios.create({ baseURL: 'https://api.github.com' }), {
   maxRequests: 1,
   perMilliseconds: 1000,
@@ -33,5 +55,18 @@ export const fetchCurrentUser = (token: string): Promise<FetchCurrentUserRespons
 };
 
 export const fetchFollowingUsers = (login: string, token: string): Promise<FetchFollowingUsersResponse> => {
-  return client.get(`/users/${login}/following?per_page=100`, { headers: { Authorization: `token ${token}` } });
+  return client.get(`/users/${login}/follwing?per_page=100`, { headers: { Authorization: `token ${token}` } });
+};
+
+export const fetchCommits = async (login: string, token: string): Promise<FetchCommitsResponse | undefined> => {
+  try {
+    return await client.get(`/repos/${login}/dotfiles/commits?per_page=100`, {
+      headers: { Authorization: `token ${token}` },
+    });
+  } catch (err: any) {
+    if (err.response?.status == 404) {
+      return undefined;
+    }
+    throw err;
+  }
 };

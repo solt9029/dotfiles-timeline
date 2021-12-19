@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { fetchCommits, fetchFollowingUsers } from '../api-clients/github';
 import { currentUserState } from '../atoms/current-user';
 import { githubFollowingUsersState } from '../atoms/github';
 
@@ -17,7 +18,7 @@ const Timeline: NextPage = () => {
 
   useEffect(() => {
     (async () => {
-      if (requestState.isLoading || requestState.error) {
+      if (requestState.isLoading || requestState.error || currentUser === undefined) {
         return;
       }
 
@@ -29,8 +30,9 @@ const Timeline: NextPage = () => {
         try {
           githubFollowingUsers
             ?.filter(({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd')))
-            .forEach((user) => {
-              console.log(user.login);
+            .forEach(async ({ login }) => {
+              const res = await fetchCommits(login, currentUser.providerToken);
+              console.log(res);
               // fetch commits and update updatedAt
               // setGithubFollowingUsers
             });
