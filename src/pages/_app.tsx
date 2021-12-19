@@ -33,7 +33,6 @@ const AppInit = () => {
         });
 
         const { data: followingUsers } = await fetchFollowingUsers(login, session.providerToken);
-        console.log(followingUsers);
         setGithubFollowingUsers(
           followingUsers.map(({ avatar_url, login }) => ({
             avatarUrl: avatar_url,
