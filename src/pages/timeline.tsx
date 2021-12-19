@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
@@ -10,8 +11,17 @@ const Timeline: NextPage = () => {
   const [githubFollowingUsers, setGithubFollowingUsers] = useRecoilState(githubFollowingUsersState);
   const router = useRouter();
 
+  const updatedAt = dayjs('2022-05-12').toDate();
+  console.log(dayjs().isAfter(dayjs(updatedAt).add(1, 'd')));
+
   useEffect(() => {
     (async () => {
+      githubFollowingUsers
+        ?.filter(({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd')))
+        .forEach((user) => {
+          // fetch commits and update updatedAt
+          // setGithubFollowingUsers
+        });
       // sample
       // for (let i = 0; i < 10; i++) {
       //   await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -21,7 +31,7 @@ const Timeline: NextPage = () => {
       // step1: fetch followingUsers
       // step2: fetch commits using for statement
     })();
-  }, [router, currentUser]);
+  }, []);
 
   return <div>timeline</div>;
 };
