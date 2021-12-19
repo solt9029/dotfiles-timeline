@@ -1,7 +1,5 @@
 import React from 'react';
-import { useSetRecoilState } from 'recoil';
 import { appwrite } from '../appwrite';
-import { currentUserState } from '../atoms';
 
 export const LoginButton = () => {
   const handleClick = () => {

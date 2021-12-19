@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSetRecoilState } from 'recoil';
 import { appwrite } from '../appwrite';
-import { currentUserState } from '../atoms';
+import { currentUserState } from '../atoms/current-user';
 
 export const LogoutButton = () => {
   const setCurrentUser = useSetRecoilState(currentUserState);

@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 
 type Commit = {
   message: string;
@@ -12,15 +12,36 @@ type User = {
   commits: Commit[] | undefined;
 };
 
-export const currentUserState = atom<User | undefined>({ key: 'github/currentUserState', default: undefined });
-export const followingUsersState = atom<User[] | undefined>({ key: 'github/followingUsersState', default: undefined });
+export type GithubState = {
+  currentUser: User | undefined;
+  followingUsers: User[] | undefined;
+};
 
-export const state = selector({
+export const githubCurrentUserState = atom<User | undefined>({
+  key: 'github/githubCurrentUserState',
+  default: undefined,
+});
+
+export const githubFollowingUsersState = atom<User[] | undefined>({
+  key: 'github/githubFollowingUsersState',
+  default: undefined,
+});
+
+export const githubState = selector<GithubState>({
   key: 'github/state',
   get: ({ get }) => {
     return {
-      currentUser: get(currentUserState),
-      followingUsers: get(followingUsersState),
+      currentUser: get(githubCurrentUserState),
+      followingUsers: get(githubFollowingUsersState),
     };
+  },
+  set: ({ set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(githubCurrentUserState, newValue);
+      set(githubFollowingUsersState, newValue);
+      return;
+    }
+    set(githubCurrentUserState, newValue.currentUser);
+    set(githubFollowingUsersState, newValue.followingUsers);
   },
 });

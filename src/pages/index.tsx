@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { currentUserState } from '../atoms';
+import { currentUserState } from '../atoms/current-user';
 import { LoginButton } from '../components/LoginButton';
 import { LogoutButton } from '../components/LogoutButton';
 

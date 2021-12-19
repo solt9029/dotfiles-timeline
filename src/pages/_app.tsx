@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { RecoilRoot, useSetRecoilState } from 'recoil';
 import { appwrite } from '../appwrite';
-import { currentUserState } from '../atoms';
+import { currentUserState } from '../atoms/current-user';
 
 const AppInit = () => {
   const setCurrentUser = useSetRecoilState(currentUserState);
