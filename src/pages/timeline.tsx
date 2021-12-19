@@ -25,18 +25,20 @@ const Timeline: NextPage = () => {
 
       let newGithubFollowingUsers = githubFollowingUsers;
 
-      try {
-        githubFollowingUsers
-          ?.filter(({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd')))
-          .forEach((user) => {
-            console.log(user.login);
-            // fetch commits and update updatedAt
-            // setGithubFollowingUsers
-          });
-      } catch (err) {
-        console.log(err);
-        setRequestState({ isLoading: false, error: err });
-      }
+      (async () => {
+        try {
+          githubFollowingUsers
+            ?.filter(({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd')))
+            .forEach((user) => {
+              console.log(user.login);
+              // fetch commits and update updatedAt
+              // setGithubFollowingUsers
+            });
+        } catch (err) {
+          console.log(err);
+          setRequestState({ isLoading: false, error: err });
+        }
+      })();
     })();
   }, [githubFollowingUsers, requestState]);
 
