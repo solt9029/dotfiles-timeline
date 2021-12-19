@@ -10,7 +10,11 @@ type User = {
   login: string;
   avatarUrl: string;
   twitterUsername: string;
-  commits: Commit[] | undefined;
+  bio: string;
+  followingCount: number;
+  followerCount: number;
+  commits: Commit[];
+  updatedAt: Date;
 };
 
 export type GithubState = {
