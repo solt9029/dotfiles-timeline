@@ -9,11 +9,11 @@ import { githubCurrentUserState } from '../atoms/github';
 
 const AppInit = () => {
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
-  const setGithubCurrentUser = useSetRecoilState(githubCurrentUserState);
+  const [githubCurrentUser, setGithubCurrentUser] = useRecoilState(githubCurrentUserState);
 
   useEffect(() => {
     (async () => {
-      if (currentUser) {
+      if (currentUser && githubCurrentUser) {
         return;
       }
 
@@ -39,7 +39,7 @@ const AppInit = () => {
         setCurrentUser(undefined);
       }
     })();
-  }, [currentUser, setCurrentUser, setGithubCurrentUser]);
+  }, [currentUser, githubCurrentUser, setCurrentUser, setGithubCurrentUser]);
 
   return null;
 };
