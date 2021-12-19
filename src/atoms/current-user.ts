@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { persistAtom } from '../utils';
 
 export type CurrentUserState =
   | {
@@ -7,4 +8,8 @@ export type CurrentUserState =
     }
   | undefined;
 
-export const currentUserState = atom<CurrentUserState>({ key: 'current-user/state', default: undefined });
+export const currentUserState = atom<CurrentUserState>({
+  key: 'current-user/state',
+  default: undefined,
+  effects_UNSTABLE: [persistAtom('current-user/state')],
+});

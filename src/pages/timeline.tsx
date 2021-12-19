@@ -21,7 +21,7 @@ const Timeline: NextPage = () => {
     })();
   }, [router, currentUser]);
 
-  return <div>{currentUser?.id}timeline</div>;
+  return <div>timeline</div>;
 };
 
 export default Timeline;

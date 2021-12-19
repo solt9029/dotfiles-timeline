@@ -1,4 +1,5 @@
 import { atom, DefaultValue, selector } from 'recoil';
+import { persistAtom } from '../utils';
 
 type Commit = {
   message: string;
@@ -20,11 +21,13 @@ export type GithubState = {
 export const githubCurrentUserState = atom<User | undefined>({
   key: 'github/githubCurrentUserState',
   default: undefined,
+  effects_UNSTABLE: [persistAtom('github/githubCurrentUserState')],
 });
 
 export const githubFollowingUsersState = atom<User[] | undefined>({
   key: 'github/githubFollowingUsersState',
   default: undefined,
+  effects_UNSTABLE: [persistAtom('github/githubFollowingUsersState')],
 });
 
 export const githubState = selector<GithubState>({
