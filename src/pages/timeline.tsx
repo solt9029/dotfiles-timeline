@@ -1,9 +1,8 @@
 import dayjs from 'dayjs';
 import type { NextPage } from 'next';
-import { useRouter } from 'next/dist/client/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { fetchCommits, fetchFollowingUsers } from '../api-clients/github';
+import { fetchCommits } from '../api-clients/github';
 import { currentUserState } from '../atoms/current-user';
 import { githubFollowingUsersState } from '../atoms/github';
 import clone from 'just-clone';
