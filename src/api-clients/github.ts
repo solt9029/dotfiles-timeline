@@ -9,6 +9,7 @@ type FetchCurrentUserResponse = {
     followers: number;
     following: number;
     bio: string;
+    html_url: string;
     [key: string]: unknown;
   };
   [key: string]: unknown;
@@ -18,6 +19,7 @@ type FetchFollowingUsersResponse = {
   data: {
     login: string;
     avatar_url: string;
+    html_url: string;
     [key: string]: unknown;
   }[];
   [key: string]: unknown;
@@ -56,7 +58,7 @@ export const fetchCurrentUser = (token: string): Promise<FetchCurrentUserRespons
 };
 
 export const fetchFollowingUsers = (login: string, token: string): Promise<FetchFollowingUsersResponse> => {
-  return client.get(`/users/${login}/follwing?per_page=100`, { headers: { Authorization: `token ${token}` } });
+  return client.get(`/users/${login}/following?per_page=100`, { headers: { Authorization: `token ${token}` } });
 };
 
 export const fetchCommits = async (login: string, token: string): Promise<FetchCommitsResponse | undefined> => {

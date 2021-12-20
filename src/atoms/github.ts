@@ -13,6 +13,7 @@ type User = {
   login: string;
   avatarUrl: string;
   commits: Commit[];
+  htmlUrl: string;
   updatedAt: Date | undefined;
 };
 
