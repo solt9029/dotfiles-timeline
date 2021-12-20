@@ -36,6 +36,7 @@ type FetchCommitsResponse = {
     };
     committer: {
       login: string;
+      avatar_url: string;
       html_url: string;
       [key: string]: unknown;
     };

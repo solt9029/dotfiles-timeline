@@ -6,43 +6,50 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { fetchCommits, fetchFollowingUsers } from '../api-clients/github';
 import { currentUserState } from '../atoms/current-user';
 import { githubFollowingUsersState } from '../atoms/github';
+import clone from 'just-clone';
 
 const Timeline: NextPage = () => {
   const currentUser = useRecoilValue(currentUserState);
   const [githubFollowingUsers, setGithubFollowingUsers] = useRecoilState(githubFollowingUsersState);
-  const [requestState, setRequestState] = useState<{ isLoading: boolean; error: any }>({
-    isLoading: false,
-    error: undefined,
-  });
-  const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      if (requestState.isLoading || requestState.error || currentUser === undefined) {
+      if (githubFollowingUsers === undefined || currentUser === undefined) {
         return;
       }
 
-      setRequestState({ isLoading: true, error: undefined });
+      let newGithubFollowingUsers = clone(githubFollowingUsers);
 
-      let newGithubFollowingUsers = githubFollowingUsers;
+      const index = newGithubFollowingUsers.findIndex(
+        ({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd'))
+      );
+      if (index === -1) {
+        return;
+      }
 
-      (async () => {
-        try {
-          githubFollowingUsers
-            ?.filter(({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd')))
-            .forEach(async ({ login }) => {
-              const res = await fetchCommits(login, currentUser.providerToken);
-              console.log(res);
-              // fetch commits and update updatedAt
-              // setGithubFollowingUsers
-            });
-        } catch (err) {
-          console.log(err);
-          setRequestState({ isLoading: false, error: err });
-        }
-      })();
+      try {
+        const res = await fetchCommits(newGithubFollowingUsers[index].login, currentUser.providerToken);
+
+        newGithubFollowingUsers[index].commits = (res?.data || []).map(({ commit, committer, html_url }) => {
+          return {
+            message: commit.message,
+            date: commit.committer.date,
+            commentCount: commit.comment_count,
+            committer: {
+              login: committer?.login,
+              avatarUrl: committer?.avatar_url,
+            },
+            htmlUrl: html_url,
+          };
+        });
+        newGithubFollowingUsers[index].updatedAt = dayjs().toDate();
+
+        setGithubFollowingUsers(newGithubFollowingUsers);
+      } catch (err) {
+        console.log(err);
+      }
     })();
-  }, [githubFollowingUsers, requestState]);
+  }, [currentUser, githubFollowingUsers, setGithubFollowingUsers]);
 
   return <div>timeline</div>;
 };

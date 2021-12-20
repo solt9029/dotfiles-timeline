@@ -4,6 +4,9 @@ import { persistAtom } from '../utils';
 type Commit = {
   message: string;
   date: string;
+  commentCount: number;
+  committer: Pick<User, 'login' | 'avatarUrl'>;
+  htmlUrl: string;
 };
 
 type User = {
