@@ -19,7 +19,7 @@ const Timeline: NextPage = () => {
     let newGithubFollowingUsers = clone(githubFollowingUsers);
 
     const index = newGithubFollowingUsers.findIndex(
-      ({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(100, 'second'))
+      ({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd'))
     );
     if (index === -1) {
       return;
