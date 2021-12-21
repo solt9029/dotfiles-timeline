@@ -1,6 +1,21 @@
+import { useRouter } from 'next/dist/client/router';
 import { Container, Button } from 'react-bootstrap';
+import { useRecoilValue } from 'recoil';
+import { currentUserState } from '../atoms/current-user';
+import { login } from '../utils';
 
 export const Jumbotron = () => {
+  const currentUser = useRecoilValue(currentUserState);
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (currentUser) {
+      router.push('/timeline');
+      return;
+    }
+    login();
+  };
+
   return (
     <div
       style={{
@@ -22,7 +37,9 @@ export const Jumbotron = () => {
           <div>そうだ、共通の話題作りに、dotfilesのコミット履歴を見てみよう。</div>
         </div>
         <div style={{ paddingBottom: 50 }}>
-          <Button size="lg">タイムラインを確認する</Button>
+          <Button size="lg" onClick={handleClick}>
+            タイムラインを確認する
+          </Button>
         </div>
       </Container>
     </div>

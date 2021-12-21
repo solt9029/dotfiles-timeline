@@ -1,7 +1,12 @@
 import { Container, Form, Nav, Navbar } from 'react-bootstrap';
+import { useRecoilValue } from 'recoil';
+import { currentUserState } from '../atoms/current-user';
 import { LoginButton } from './LoginButton';
+import { LogoutButton } from './LogoutButton';
 
 export const AppNavbar = () => {
+  const currentUser = useRecoilValue(currentUserState);
+
   return (
     <Navbar bg="light" expand="md">
       <Container>
@@ -11,9 +16,7 @@ export const AppNavbar = () => {
           <Nav className="me-auto my-2 my-lg-0">
             <Nav.Link href="/timeline">タイムライン</Nav.Link>
           </Nav>
-          <Form className="d-flex">
-            <LoginButton />
-          </Form>
+          <Form className="d-flex">{currentUser ? <LogoutButton /> : <LoginButton />}</Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>

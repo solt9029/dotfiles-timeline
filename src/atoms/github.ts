@@ -25,13 +25,13 @@ export type GithubState = {
 export const githubCurrentUserState = atom<User | undefined>({
   key: 'github/githubCurrentUserState',
   default: undefined,
-  effects_UNSTABLE: [persistAtom('github/githubCurrentUserState')],
+  effects_UNSTABLE: [persistAtom('persist/github/githubCurrentUserState')],
 });
 
 export const githubFollowingUsersState = atom<User[] | undefined>({
   key: 'github/githubFollowingUsersState',
   default: undefined,
-  effects_UNSTABLE: [persistAtom('github/githubFollowingUsersState')],
+  effects_UNSTABLE: [persistAtom('persist/github/githubFollowingUsersState')],
 });
 
 export const githubState = selector<GithubState>({

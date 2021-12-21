@@ -11,5 +11,5 @@ export type CurrentUserState =
 export const currentUserState = atom<CurrentUserState>({
   key: 'current-user/state',
   default: undefined,
-  effects_UNSTABLE: [persistAtom('current-user/state')],
+  effects_UNSTABLE: [persistAtom('persist/current-user/state')],
 });
