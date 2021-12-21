@@ -1,11 +1,12 @@
 import dayjs from 'dayjs';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
+import { RecoilRoot, useRecoilState } from 'recoil';
 import { fetchCurrentUser, fetchFollowingUsers } from '../api-clients/github';
 import { appwrite } from '../appwrite';
 import { currentUserState } from '../atoms/current-user';
 import { githubCurrentUserState, githubFollowingUsersState } from '../atoms/github';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AppInit = () => {
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
