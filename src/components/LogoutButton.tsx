@@ -1,14 +1,14 @@
 import React from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 import { appwrite } from '../appwrite';
-import { currentUserState } from '../atoms/current-user';
+import { state } from '../atoms';
 
 export const LogoutButton = () => {
-  const setCurrentUser = useSetRecoilState(currentUserState);
+  const resetState = useResetRecoilState(state);
 
   const handleClick = async () => {
     await appwrite.account.deleteSession('current');
-    setCurrentUser(undefined);
+    resetState();
   };
 
   return <button onClick={handleClick}>ログアウト</button>;
