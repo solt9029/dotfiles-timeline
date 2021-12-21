@@ -1,4 +1,4 @@
-import { Container, Form, FormControl, Nav, Navbar, Button } from 'react-bootstrap';
+import { Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { LoginButton } from './LoginButton';
 
 export const AppNavbar = () => {
