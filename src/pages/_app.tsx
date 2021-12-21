@@ -26,23 +26,26 @@ const AppInit = () => {
         const {
           data: { avatar_url, login, html_url },
         } = await fetchCurrentUser(session.providerToken);
-        setGithubCurrentUser({
+        const githubCurrentUser = {
           login,
           avatarUrl: avatar_url,
           commits: [],
           htmlUrl: html_url,
           updatedAt: undefined,
-        });
+        };
+        setGithubCurrentUser(githubCurrentUser);
 
         const { data: followingUsers } = await fetchFollowingUsers(login, session.providerToken);
         setGithubFollowingUsers(
-          followingUsers.map(({ avatar_url, login, html_url }) => ({
-            avatarUrl: avatar_url,
-            login,
-            commits: [],
-            htmlUrl: html_url,
-            updatedAt: undefined,
-          }))
+          followingUsers
+            .map(({ avatar_url, login, html_url }) => ({
+              avatarUrl: avatar_url,
+              login,
+              commits: [],
+              htmlUrl: html_url,
+              updatedAt: undefined,
+            }))
+            .concat([githubCurrentUser])
         );
       } catch (err) {
         console.log(err);

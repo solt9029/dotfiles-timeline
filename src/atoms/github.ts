@@ -28,6 +28,7 @@ export const githubCurrentUserState = atom<User | undefined>({
   effects_UNSTABLE: [persistAtom('persist/github/githubCurrentUserState')],
 });
 
+// TODO: rename to githubTimelineUsersState since this includes current user
 export const githubFollowingUsersState = atom<User[] | undefined>({
   key: 'github/githubFollowingUsersState',
   default: undefined,
