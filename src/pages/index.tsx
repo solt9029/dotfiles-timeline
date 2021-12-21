@@ -6,23 +6,14 @@ import { currentUserState } from '../atoms/current-user';
 import { LoginButton } from '../components/LoginButton';
 import { LogoutButton } from '../components/LogoutButton';
 import Link from 'next/link';
+import { AppNavbar } from '../components/AppNavbar';
 
 const Index: NextPage = () => {
   const currentUser = useRecoilValue(currentUserState);
 
   return (
     <>
-      <Navbar bg="light" expand="md">
-        <Container>
-          <Navbar.Brand href="/">dotfiles-timeline</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse>
-            <Nav>
-              <Nav.Link href="/timeline">タイムライン</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <AppNavbar />
       <div
         style={{
           marginBottom: 100,
