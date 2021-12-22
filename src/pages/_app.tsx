@@ -21,7 +21,6 @@ const AppInit = () => {
       }
 
       let newGithubFollowingUsers = clone(githubFollowingUsers);
-
       const index = newGithubFollowingUsers.findIndex(
         ({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd'))
       );
@@ -46,12 +45,7 @@ const AppInit = () => {
         });
         newGithubFollowingUsers[index].updatedAt = dayjs().toDate();
 
-        setGithubFollowingUsers((currentValue) => {
-          if (currentValue) {
-            return newGithubFollowingUsers;
-          }
-          return undefined;
-        });
+        setGithubFollowingUsers((currentValue) => currentValue && newGithubFollowingUsers);
       } catch (err) {
         console.log(err);
       }
@@ -60,52 +54,46 @@ const AppInit = () => {
 
   useEffect(() => {
     (async () => {
-      if (currentUser) {
+      if (currentUser === undefined) {
+        try {
+          const session = await appwrite.account.getSession('current');
+          setCurrentUser({ id: session.$id, providerToken: session.providerToken });
+        } catch (err) {
+          console.log(err);
+        }
         return;
       }
 
-      try {
-        const session = await appwrite.account.getSession('current');
-        setCurrentUser({ id: session.$id, providerToken: session.providerToken });
-      } catch {}
-    })();
-  }, [currentUser, setCurrentUser]);
-
-  useEffect(() => {
-    (async () => {
-      if (currentUser === undefined || githubCurrentUser) {
+      if (githubCurrentUser === undefined) {
+        const {
+          data: { avatar_url, login, html_url },
+        } = await fetchCurrentUser(currentUser.providerToken);
+        setGithubCurrentUser({ login, avatarUrl: avatar_url, commits: [], htmlUrl: html_url, updatedAt: undefined });
         return;
       }
 
-      const {
-        data: { avatar_url, login, html_url },
-      } = await fetchCurrentUser(currentUser.providerToken);
-
-      setGithubCurrentUser({ login, avatarUrl: avatar_url, commits: [], htmlUrl: html_url, updatedAt: undefined });
-    })();
-  }, [setGithubCurrentUser, currentUser, githubCurrentUser]);
-
-  useEffect(() => {
-    (async () => {
-      if (currentUser === undefined || githubCurrentUser === undefined || githubFollowingUsers) {
-        return;
+      if (githubFollowingUsers === undefined) {
+        const { data: followingUsers } = await fetchFollowingUsers(githubCurrentUser.login, currentUser.providerToken);
+        const users = [githubCurrentUser].concat(
+          followingUsers.map(({ avatar_url, login, html_url }) => ({
+            avatarUrl: avatar_url,
+            login,
+            commits: [],
+            htmlUrl: html_url,
+            updatedAt: undefined,
+          }))
+        );
+        setGithubFollowingUsers(users);
       }
-
-      const { data: followingUsers } = await fetchFollowingUsers(githubCurrentUser.login, currentUser.providerToken);
-
-      const users = [githubCurrentUser].concat(
-        followingUsers.map(({ avatar_url, login, html_url }) => ({
-          avatarUrl: avatar_url,
-          login,
-          commits: [],
-          htmlUrl: html_url,
-          updatedAt: undefined,
-        }))
-      );
-
-      setGithubFollowingUsers(users);
     })();
-  }, [currentUser, githubCurrentUser, githubFollowingUsers, setGithubFollowingUsers]);
+  }, [
+    currentUser,
+    githubCurrentUser,
+    githubFollowingUsers,
+    setCurrentUser,
+    setGithubCurrentUser,
+    setGithubFollowingUsers,
+  ]);
 
   return null;
 };
