@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { AppProps } from 'next/app';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { fetchCommits, fetchCurrentUser, fetchFollowingUsers } from '../api-clients/github';
 import { appwrite } from '../appwrite';

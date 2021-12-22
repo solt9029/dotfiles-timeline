@@ -1,15 +1,11 @@
 import type { NextPage } from 'next';
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import { useRecoilValue } from 'recoil';
-import { currentUserState } from '../atoms/current-user';
 import { AppNavbar } from '../components/AppNavbar';
 import { Jumbotron } from '../components/Jumbotron';
 import { Footer } from '../components/Footer';
 
 const Index: NextPage = () => {
-  const currentUser = useRecoilValue(currentUserState);
-
   return (
     <>
       <AppNavbar />

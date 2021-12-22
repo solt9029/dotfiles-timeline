@@ -1,11 +1,9 @@
 import dayjs from 'dayjs';
 import type { NextPage } from 'next';
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { fetchCommits } from '../api-clients/github';
 import { currentUserState } from '../atoms/current-user';
 import { githubFollowingUsersState } from '../atoms/github';
-import clone from 'just-clone';
 import { AppNavbar } from '../components/AppNavbar';
 import { Card, Container, Image } from 'react-bootstrap';
 
