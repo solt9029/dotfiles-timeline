@@ -1,17 +1,62 @@
 import dayjs from 'dayjs';
 import type { AppProps } from 'next/app';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { RecoilRoot, useRecoilState } from 'recoil';
-import { fetchCurrentUser, fetchFollowingUsers } from '../api-clients/github';
+import { fetchCommits, fetchCurrentUser, fetchFollowingUsers } from '../api-clients/github';
 import { appwrite } from '../appwrite';
 import { currentUserState } from '../atoms/current-user';
 import { githubCurrentUserState, githubFollowingUsersState } from '../atoms/github';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import clone from 'just-clone';
 
 const AppInit = () => {
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
   const [githubCurrentUser, setGithubCurrentUser] = useRecoilState(githubCurrentUserState);
   const [githubFollowingUsers, setGithubFollowingUsers] = useRecoilState(githubFollowingUsersState);
+
+  useEffect(() => {
+    (async () => {
+      if (currentUser === undefined || githubFollowingUsers === undefined) {
+        return;
+      }
+
+      let newGithubFollowingUsers = clone(githubFollowingUsers);
+
+      const index = newGithubFollowingUsers.findIndex(
+        ({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd'))
+      );
+      if (index === -1) {
+        return;
+      }
+
+      try {
+        const res = await fetchCommits(newGithubFollowingUsers[index].login, currentUser.providerToken);
+
+        newGithubFollowingUsers[index].commits = (res?.data || []).map(({ commit, committer, html_url }) => {
+          return {
+            message: commit.message,
+            date: commit.committer.date,
+            commentCount: commit.comment_count,
+            committer: {
+              login: committer?.login,
+              avatarUrl: committer?.avatar_url,
+            },
+            htmlUrl: html_url,
+          };
+        });
+        newGithubFollowingUsers[index].updatedAt = dayjs().toDate();
+
+        setGithubFollowingUsers((currentValue) => {
+          if (currentValue) {
+            return newGithubFollowingUsers;
+          }
+          return undefined;
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [currentUser, githubFollowingUsers, setGithubFollowingUsers]);
 
   useEffect(() => {
     (async () => {

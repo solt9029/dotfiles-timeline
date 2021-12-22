@@ -24,51 +24,6 @@ const Timeline: NextPage = () => {
     newWindow.location.href = `https://twitter.com/share?hashtags=${hashtags}&url=${url}&count=none&lang=ja`;
   };
 
-  // const updateCommits = useCallback(async () => {
-  //   if (githubFollowingUsers === undefined || currentUser === undefined) {
-  //     return;
-  //   }
-
-  //   let newGithubFollowingUsers = clone(githubFollowingUsers);
-
-  //   const index = newGithubFollowingUsers.findIndex(
-  //     ({ updatedAt }) => updatedAt == undefined || dayjs().isAfter(dayjs(updatedAt).add(1, 'd'))
-  //   );
-  //   if (index === -1) {
-  //     return;
-  //   }
-
-  //   try {
-  //     const res = await fetchCommits(newGithubFollowingUsers[index].login, currentUser.providerToken);
-
-  //     newGithubFollowingUsers[index].commits = (res?.data || []).map(({ commit, committer, html_url }) => {
-  //       return {
-  //         message: commit.message,
-  //         date: commit.committer.date,
-  //         commentCount: commit.comment_count,
-  //         committer: {
-  //           login: committer?.login,
-  //           avatarUrl: committer?.avatar_url,
-  //         },
-  //         htmlUrl: html_url,
-  //       };
-  //     });
-  //     newGithubFollowingUsers[index].updatedAt = dayjs().toDate();
-
-  //     setGithubFollowingUsers(newGithubFollowingUsers);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [currentUser, githubFollowingUsers, setGithubFollowingUsers]);
-
-  // useEffect(() => {
-  //   const id = setInterval(() => {
-  //     updateCommits();
-  //     console.log('test');
-  //   }, 1000);
-  //   return () => clearInterval(id);
-  // }, [updateCommits]);
-
   const commits = (githubFollowingUsers || [])
     .flatMap(({ commits }) => commits)
     .sort((prev, current) => dayjs(current.date).unix() - dayjs(prev.date).unix());
