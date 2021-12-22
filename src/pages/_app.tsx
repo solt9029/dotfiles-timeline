@@ -15,44 +15,52 @@ const AppInit = () => {
 
   useEffect(() => {
     (async () => {
-      if (currentUser && githubCurrentUser && githubFollowingUsers) {
+      if (currentUser) {
         return;
       }
 
       try {
         const session = await appwrite.account.getSession('current');
         setCurrentUser({ id: session.$id, providerToken: session.providerToken });
+      } catch {}
+    })();
+  }, [currentUser, setCurrentUser]);
 
-        const {
-          data: { avatar_url, login, html_url },
-        } = await fetchCurrentUser(session.providerToken);
-        const githubCurrentUser = {
-          login,
+  useEffect(() => {
+    (async () => {
+      if (currentUser === undefined || githubCurrentUser) {
+        return;
+      }
+
+      const {
+        data: { avatar_url, login, html_url },
+      } = await fetchCurrentUser(currentUser.providerToken);
+
+      setGithubCurrentUser({ login, avatarUrl: avatar_url, commits: [], htmlUrl: html_url, updatedAt: undefined });
+    })();
+  }, [setGithubCurrentUser, currentUser, githubCurrentUser]);
+
+  useEffect(() => {
+    (async () => {
+      if (currentUser === undefined || githubCurrentUser === undefined || githubFollowingUsers) {
+        return;
+      }
+
+      const { data: followingUsers } = await fetchFollowingUsers(githubCurrentUser.login, currentUser.providerToken);
+
+      const users = [githubCurrentUser].concat(
+        followingUsers.map(({ avatar_url, login, html_url }) => ({
           avatarUrl: avatar_url,
+          login,
           commits: [],
           htmlUrl: html_url,
           updatedAt: undefined,
-        };
-        setGithubCurrentUser(githubCurrentUser);
+        }))
+      );
 
-        const { data: followingUsers } = await fetchFollowingUsers(login, session.providerToken);
-        setGithubFollowingUsers(
-          followingUsers
-            .map(({ avatar_url, login, html_url }) => ({
-              avatarUrl: avatar_url,
-              login,
-              commits: [],
-              htmlUrl: html_url,
-              updatedAt: undefined,
-            }))
-            .concat([githubCurrentUser])
-        );
-      } catch (err) {
-        console.log(err);
-        setCurrentUser(undefined);
-      }
+      setGithubFollowingUsers(users);
     })();
-  }, []); // eslint-disable-line
+  }, [currentUser, githubCurrentUser, githubFollowingUsers, setGithubFollowingUsers]);
 
   return null;
 };

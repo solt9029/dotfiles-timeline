@@ -10,8 +10,8 @@ export const LogoutButton = () => {
   const router = useRouter();
 
   const handleClick = async () => {
-    resetState();
     await appwrite.account.deleteSession('current');
+    resetState();
     router.push('/');
   };
 
