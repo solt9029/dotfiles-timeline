@@ -110,7 +110,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="twitter:description"
           content="勉強会で昔に知り合ったエンジニアの人、最近は何やってるんだろう？そうだ、dotfilesのコミット履歴を見てみよう。"
         />
-        <meta name="twitter:image" content="http://dotfiles.solt9029.com/jumbotron.jpeg" />
+        <meta name="twitter:image" content="http://dotfiles.solt9029.com/twitter_card.png" />
         <meta name="twitter:url" content="http://dotfiles.solt9029.com" />
         <meta name="twitter:site" content="@solt9029" />
         <meta name="twitter:creator" content="@solt9029" />
