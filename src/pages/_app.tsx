@@ -8,6 +8,7 @@ import { currentUserState } from '../atoms/current-user';
 import { githubCurrentUserState, githubFollowingUsersState } from '../atoms/github';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clone from 'just-clone';
+import Head from 'next/head';
 
 const AppInit = () => {
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
@@ -101,6 +102,19 @@ const AppInit = () => {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
+      <Head>
+        <title>dotfiles-timeline</title>
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="dotfiles-timeline" />
+        <meta
+          name="twitter:description"
+          content="勉強会で昔に知り合ったエンジニアの人、最近は何やってるんだろう？そうだ、dotfilesのコミット履歴を見てみよう。"
+        />
+        <meta name="twitter:image" content="http://dotfiles.solt9029.com/jumbotron.jpeg" />
+        <meta name="twitter:url" content="http://dotfiles.solt9029.com" />
+        <meta name="twitter:site" content="@solt9029" />
+        <meta name="twitter:creator" content="@solt9029" />
+      </Head>
       <Component {...pageProps} />
       <AppInit />
     </RecoilRoot>
